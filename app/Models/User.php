@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
     ];
 
@@ -45,5 +46,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // 'role' sengaja tidak masuk $fillable agar tidak bisa diubah lewat form.
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }
