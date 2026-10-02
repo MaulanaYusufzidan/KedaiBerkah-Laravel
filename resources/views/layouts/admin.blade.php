@@ -18,19 +18,33 @@
                 <button type="submit" class="btn btn-quiet">Keluar</button>
             </form>
 
-            <nav aria-label="Menu admin" class="w-full sm:order-2 sm:w-auto sm:flex-1">
-                <a href="{{ route('admin.dashboard') }}"
-                   @class([
-                       'inline-block border-b-2 py-2 text-base font-medium',
-                       'border-brand text-ink' => request()->routeIs('admin.dashboard'),
-                       'border-transparent text-muted hover:text-ink' => ! request()->routeIs('admin.dashboard'),
-                   ])
-                   @if (request()->routeIs('admin.dashboard')) aria-current="page" @endif>Dashboard</a>
+            <nav aria-label="Menu admin" class="flex w-full flex-wrap gap-x-6 sm:order-2 sm:w-auto sm:flex-1">
+                @foreach ([
+                    ['Dashboard', 'admin.dashboard', 'admin.dashboard'],
+                    ['Kategori', 'admin.categories.index', 'admin.categories.*'],
+                    ['Produk', 'admin.products.index', 'admin.products.*'],
+                    ['Menu Hari Ini', 'admin.daily-menus.index', 'admin.daily-menus.*'],
+                ] as [$label, $route, $pattern])
+                    <a href="{{ route($route) }}"
+                       @class([
+                           'inline-block border-b-2 py-2 text-base font-medium',
+                           'border-brand text-ink' => request()->routeIs($pattern),
+                           'border-transparent text-muted hover:text-ink' => ! request()->routeIs($pattern),
+                       ])
+                       @if (request()->routeIs($pattern)) aria-current="page" @endif>{{ $label }}</a>
+                @endforeach
             </nav>
         </div>
     </header>
 
     <main id="konten" class="mx-auto max-w-4xl px-4 py-8">
+        @if (session('status'))
+            <div role="status" class="mb-5 rounded-control border border-success/30 bg-success-soft px-4 py-3 text-success">{{ session('status') }}</div>
+        @endif
+        @if (session('error'))
+            <div role="alert" class="mb-5 rounded-control border border-danger/30 bg-danger-soft px-4 py-3 text-danger">{{ session('error') }}</div>
+        @endif
+
         @yield('content')
     </main>
 

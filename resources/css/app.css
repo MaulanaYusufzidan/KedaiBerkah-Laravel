@@ -23,6 +23,8 @@
     --color-line: #e3dccf;
     --color-danger: #b3261e;
     --color-danger-soft: #fdeceb;
+    --color-success: #1e6b3a;
+    --color-success-soft: #e8f3ec;
 
     --radius-control: 0.375rem;
 }
@@ -40,6 +42,10 @@
 
     .btn-quiet {
         @apply border border-line bg-surface text-ink hover:bg-canvas;
+    }
+
+    .btn-danger {
+        @apply border border-danger bg-surface text-danger hover:bg-danger-soft;
     }
 
     .field-label {
