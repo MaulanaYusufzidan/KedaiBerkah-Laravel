@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\FulfillmentType;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -57,5 +59,28 @@ class Order extends Model
     public function statusHistories(): HasMany
     {
         return $this->hasMany(OrderStatusHistory::class)->orderBy('created_at')->orderBy('id');
+    }
+
+    /**
+     * Pesanan yang dihitung sebagai omzet terealisasi: sudah ada pembayaran berstatus
+     * "paid" dan pesanan tidak dibatalkan. Memakai EXISTS (bukan JOIN) agar total
+     * pesanan tidak terhitung ganda ketika pembayaran/item lebih dari satu.
+     */
+    public function scopeRealized(Builder $query): Builder
+    {
+        return $query
+            ->where('status', '!=', OrderStatus::Cancelled->value)
+            ->whereHas('payments', fn (Builder $q) => $q->where('status', PaymentStatus::Paid->value));
+    }
+
+    /** Nama area saat pesanan dibuat (snapshot); pesanan lama jatuh ke nama area saat ini. */
+    public function areaName(): ?string
+    {
+        return $this->delivery_area_name ?? $this->deliveryArea?->district;
+    }
+
+    public function isPickup(): bool
+    {
+        return $this->fulfillment_type === FulfillmentType::Pickup;
     }
 }

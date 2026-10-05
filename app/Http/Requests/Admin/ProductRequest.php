@@ -23,6 +23,11 @@ class ProductRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:1000'],
             'base_price' => ['required', 'integer', 'min:0', 'max:10000000'],
             'is_active' => ['required', 'boolean'],
+            'image' => [
+                'nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'mimetypes:image/jpeg,image/png,image/webp',
+                'max:2048', 'dimensions:min_width=100,min_height=100,max_width=6000,max_height=6000',
+            ],
+            'remove_image' => ['nullable', 'boolean'],
         ];
     }
 
@@ -41,6 +46,14 @@ class ProductRequest extends FormRequest
             'base_price.min' => 'Harga tidak boleh negatif.',
             'base_price.max' => 'Harga maksimal Rp10.000.000.',
             'is_active.*' => 'Status tidak valid.',
+            'image.uploaded' => 'Gambar gagal diunggah. Ukuran berkas mungkin melebihi batas server.',
+            'image.file' => 'Gambar harus berupa berkas yang diunggah.',
+            'image.image' => 'Berkas harus berupa gambar JPG, PNG, atau WebP.',
+            'image.mimes' => 'Berkas harus berupa gambar JPG, PNG, atau WebP.',
+            'image.mimetypes' => 'Berkas harus berupa gambar JPG, PNG, atau WebP.',
+            'image.max' => 'Ukuran gambar maksimal 2 MB.',
+            'image.dimensions' => 'Dimensi gambar harus antara 100×100 dan 6000×6000 piksel.',
+            'remove_image.boolean' => 'Pilihan hapus gambar tidak valid.',
         ];
     }
 }

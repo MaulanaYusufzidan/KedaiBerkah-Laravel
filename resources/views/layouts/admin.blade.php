@@ -13,17 +13,20 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('admin.logout') }}" class="sm:order-3">
+            <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit" class="btn btn-quiet">Keluar</button>
             </form>
 
-            <nav aria-label="Menu admin" class="flex w-full flex-wrap gap-x-6 sm:order-2 sm:w-auto sm:flex-1">
+            <nav aria-label="Menu admin" class="flex w-full flex-wrap gap-x-6">
                 @foreach ([
                     ['Dashboard', 'admin.dashboard', 'admin.dashboard'],
+                    ['Pesanan', 'admin.orders.index', 'admin.orders.*'],
                     ['Kategori', 'admin.categories.index', 'admin.categories.*'],
                     ['Produk', 'admin.products.index', 'admin.products.*'],
                     ['Menu Hari Ini', 'admin.daily-menus.index', 'admin.daily-menus.*'],
+                    ['Area Pengiriman', 'admin.delivery-areas.index', 'admin.delivery-areas.*'],
+                    ['Pengaturan', 'admin.settings.edit', 'admin.settings.*'],
                 ] as [$label, $route, $pattern])
                     <a href="{{ route($route) }}"
                        @class([

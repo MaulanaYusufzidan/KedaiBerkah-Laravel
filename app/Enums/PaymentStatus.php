@@ -20,4 +20,14 @@ enum PaymentStatus: string
             self::Expired => 'Kedaluwarsa',
         };
     }
+
+    public function tone(): string
+    {
+        return match ($this) {
+            self::Paid => 'success',
+            self::Rejected => 'danger',
+            self::WaitingVerification => 'warning',
+            default => 'neutral',
+        };
+    }
 }

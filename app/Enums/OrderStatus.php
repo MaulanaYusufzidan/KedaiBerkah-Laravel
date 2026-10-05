@@ -24,4 +24,15 @@ enum OrderStatus: string
             self::Cancelled => 'Dibatalkan',
         };
     }
+
+    /** Warna badge: success | danger | warning | neutral */
+    public function tone(): string
+    {
+        return match ($this) {
+            self::Completed => 'success',
+            self::Cancelled => 'danger',
+            self::WaitingVerification => 'warning',
+            default => 'neutral',
+        };
+    }
 }

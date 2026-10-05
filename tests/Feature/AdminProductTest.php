@@ -54,7 +54,7 @@ class AdminProductTest extends TestCase
 
     public function test_admin_can_create_product(): void
     {
-        $data = $this->valid(['slug' => 'dari-request', 'image' => 'x.jpg']);
+        $data = $this->valid(['slug' => 'dari-request']);
 
         $this->asAdmin()->post('/admin/products', $data)->assertRedirect(route('admin.products.index'));
 
@@ -62,7 +62,7 @@ class AdminProductTest extends TestCase
             'name' => 'Ayam Bakar Paha', 'slug' => 'ayam-bakar-paha', 'base_price' => 18000, 'is_active' => 1,
         ]);
         $this->assertDatabaseMissing('products', ['slug' => 'dari-request']);
-        $this->assertNull(Product::first()->image, 'image tidak boleh diisi lewat request');
+        $this->assertNull(Product::first()->image);
     }
 
     public function test_category_is_required_and_must_exist(): void

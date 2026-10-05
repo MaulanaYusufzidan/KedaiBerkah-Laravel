@@ -8,3 +8,24 @@ document.addEventListener('submit', (event) => {
         event.preventDefault();
     }
 });
+
+// Pratinjau gambar sebelum diunggah. Validasi sebenarnya tetap dilakukan server.
+document.addEventListener('change', (event) => {
+    const input = event.target;
+    const previewId = input.dataset?.imageInput;
+
+    if (!previewId || !input.files?.length) {
+        return;
+    }
+
+    const preview = document.getElementById(previewId);
+    const file = input.files[0];
+
+    if (preview && file.type.startsWith('image/')) {
+        if (preview.dataset.objectUrl) {
+            URL.revokeObjectURL(preview.dataset.objectUrl);
+        }
+        preview.dataset.objectUrl = URL.createObjectURL(file);
+        preview.src = preview.dataset.objectUrl;
+    }
+});

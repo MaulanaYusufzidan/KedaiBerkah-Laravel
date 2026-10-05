@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DailyMenuRequest;
 use App\Models\DailyMenu;
 use App\Models\Product;
+use App\Support\Like;
+use App\Support\Query;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +20,16 @@ class DailyMenuController extends Controller
     public function index(Request $request): View
     {
         $date = $this->dateFrom($request->query('date'));
+        $search = Query::text($request, 'q');
+        $status = DailyMenuStatus::tryFrom(Query::text($request, 'status'));
 
         $menus = DailyMenu::with('product.category')
             ->whereDate('menu_date', $date)
+            ->when($status, fn ($q) => $q->where('status', $status->value))
+            ->when($search !== '', fn ($q) => $q->whereHas(
+                'product',
+                fn ($p) => $p->whereRaw("products.name like ? escape '!'", [Like::contains($search)])
+            ))
             ->orderBy(Product::select('name')->whereColumn('products.id', 'daily_menus.product_id'))
             ->paginate(30)
             ->withQueryString();
@@ -29,6 +38,9 @@ class DailyMenuController extends Controller
             'menus' => $menus,
             'date' => $date,
             'isToday' => $date->isSameDay(now()),
+            'statuses' => DailyMenuStatus::cases(),
+            'filters' => ['q' => $search, 'status' => $status?->value],
+            'filtered' => $search !== '' || $status !== null,
         ]);
     }
 

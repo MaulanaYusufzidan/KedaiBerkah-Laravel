@@ -18,11 +18,14 @@
     --color-brand: #ffa71e;
     --color-brand-strong: #e8920c;
     --color-brand-text: #8f4600;
+    --color-chart: #b45309;
     --color-canvas: #faf7f2;
     --color-surface: #ffffff;
     --color-line: #e3dccf;
     --color-danger: #b3261e;
     --color-danger-soft: #fdeceb;
+    --color-warning: #7a4b00;
+    --color-warning-soft: #fff3dc;
     --color-success: #1e6b3a;
     --color-success-soft: #e8f3ec;
 

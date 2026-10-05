@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\RateLimiter;
@@ -165,16 +164,14 @@ class AdminAuthTest extends TestCase
         $this->post('/admin/logout')->assertRedirect(route('admin.login'));
     }
 
-    public function test_dashboard_shows_only_stored_settings_and_marks_empty_ones(): void
+    public function test_dashboard_shows_empty_state_without_placeholder_numbers_when_there_are_no_orders(): void
     {
-        Setting::set('shop_name', 'Kedai Berkah');
-        Setting::set('whatsapp_number', '6287874627555');
-
         $this->actingAs($this->admin())
             ->get('/admin/dashboard')
-            ->assertSee('Kedai Berkah')
-            ->assertSee('0878-7462-7555')
-            ->assertSee('Belum diisi');
+            ->assertOk()
+            ->assertSee('Belum ada penjualan pada periode ini.')
+            ->assertSee('Rp0')
+            ->assertDontSee('Produk terlaris');
     }
 
     public function test_dashboard_escapes_admin_name(): void

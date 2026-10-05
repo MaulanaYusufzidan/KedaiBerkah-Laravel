@@ -23,6 +23,7 @@ class SettingSeeder extends Seeder
             'bank_account_number' => null,
             'bank_account_name' => null,
             'qris_image' => null,
+            'payment_instructions' => null,
             'instagram' => null,
         ];
 

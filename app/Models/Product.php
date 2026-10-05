@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasUniqueSlug;
+use App\Support\ImageStorage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,5 +31,11 @@ class Product extends Model
     public function dailyMenus(): HasMany
     {
         return $this->hasMany(DailyMenu::class);
+    }
+
+    /** URL gambar produk, atau placeholder lokal jika belum ada gambar. */
+    public function imageUrl(): string
+    {
+        return ImageStorage::url($this->image) ?? asset('images/placeholder-produk.svg');
     }
 }
